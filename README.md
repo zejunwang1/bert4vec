@@ -60,7 +60,7 @@ print(similarity)
 
 结果如下：
 
-
+![image](https://github.com/zejunwang1/bert4vec/blob/main/images/fig2.png)
 
 假设 `sent1` 包含 M 个句子，`sent2` 包含 N 个句子，当 similarity 函数的 return_matrix 参数设置为 False 时，函数返回 `sent1` 和 `sent2` 中同一行两个句子之间的余弦相似度，此时要求 M=N，否则会报错。
 
@@ -73,7 +73,7 @@ print(similarity)
 
 结果如下：
 
-
+![image](https://github.com/zejunwang1/bert4vec/blob/main/images/fig3.png)
 
 #### 语义检索
 
@@ -113,7 +113,7 @@ print(results)
 
 结果如下：
 
-
+![image](https://github.com/zejunwang1/bert4vec/blob/main/images/fig4.png)
 
 Bert4Vec 类支持使用如下函数保存和加载句向量索引文件：
 
@@ -153,4 +153,6 @@ mode 与 model_name_or_path 的对应关系如下：
 - https://github.com/ZhuiyiTechnology/simbert
 - https://github.com/ZhuiyiTechnology/roformer-sim
 - https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+
+
 

@@ -95,7 +95,7 @@ def build_index(
 - n_search：近似最近邻查找时的搜索类别数量，该参数越大，查找结果越准确。
 - batch_size：句向量计算时的批量大小
 
-使用 Chinese-STS-B 验证集(https://github.com/zejunwang1/CSTS)中去重后的所有句子构建索引，进行近似最近邻查找的示例代码如下：
+使用 Chinese-STS-B 验证集 (https://github.com/zejunwang1/CSTS) 中去重后的所有句子构建索引，进行近似最近邻查找的示例代码如下：
 
 ```python
 from bert4vec import Bert4Vec

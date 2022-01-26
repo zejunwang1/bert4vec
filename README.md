@@ -48,9 +48,9 @@ from bert4vec import Bert4Vec
 
 model = Bert4Vec(mode='paraphrase-multilingual-minilm')	
 sent1 = ['喜欢打篮球的男生喜欢什么样的女生', '西安下雪了？是不是很冷啊?', '第一次去见女朋友父母该如何表现？', '小蝌蚪找妈妈怎么样', 
-         '给我推荐一款红色的车', '我喜欢北京']
+         '给我推荐一款红色的车', '我喜欢北京', 'That is a happy person']
 sent2 = ['爱打篮球的男生喜欢什么样的女生', '西安的天气怎么样啊？还在下雪吗？', '第一次去见家长该怎么做', '小蝌蚪找妈妈是谁画的', 
-         '给我推荐一款黑色的车', '我不喜欢北京']
+         '给我推荐一款黑色的车', '我不喜欢北京', 'That is a happy dog']
 
 similarity = model.similarity(sent1, sent2, return_matrix=False)
 # similarity函数支持的默认输入参数有：batch_size=64, return_matrix=False
@@ -61,7 +61,7 @@ print(similarity)
 
 
 
-假设 `sent1` 包含 $M$ 个句子，`sent2` 包含 $N$​​​​ 个句子，当 similarity 函数的 return_matrix 参数设置为 False 时，函数返回 `sent1` 和 `sent2` 中同一行两个句子之间的余弦相似度，此时要求 $M=N$​，否则会报错。
+假设 `sent1` 包含 $M$ 个句子，`sent2` 包含 $N$ 个句子，当 similarity 函数的 return_matrix 参数设置为 False 时，函数返回 `sent1` 和 `sent2` 中同一行两个句子之间的余弦相似度，此时要求 $M=N$，否则会报错。
 
 当 similarity 函数的 return_matrix 参数设置为 True 时，函数返回一个 $M\times N$ 相似度矩阵，矩阵的第 $i$ 行第 $j$ 列元素表示 `sent1` 的第 $i$ 个句子和 `sent2` 的第 $j$ 个句子之间的余弦相似度。
 

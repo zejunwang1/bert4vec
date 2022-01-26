@@ -61,9 +61,9 @@ print(similarity)
 
 
 
-假设 `sent1` 包含 $M$ 个句子，`sent2` 包含 $N$ 个句子，当 similarity 函数的 return_matrix 参数设置为 False 时，函数返回 `sent1` 和 `sent2` 中同一行两个句子之间的余弦相似度，此时要求 $M=N$，否则会报错。
+假设 `sent1` 包含 M 个句子，`sent2` 包含 N 个句子，当 similarity 函数的 return_matrix 参数设置为 False 时，函数返回 `sent1` 和 `sent2` 中同一行两个句子之间的余弦相似度，此时要求 M=N，否则会报错。
 
-当 similarity 函数的 return_matrix 参数设置为 True 时，函数返回一个 $M\times N$ 相似度矩阵，矩阵的第 $i$ 行第 $j$ 列元素表示 `sent1` 的第 $i$ 个句子和 `sent2` 的第 $j$ 个句子之间的余弦相似度。
+当 similarity 函数的 return_matrix 参数设置为 True 时，函数返回一个 M\*N 相似度矩阵，矩阵的第 i 行第 j 列元素表示 `sent1` 的第 i 个句子和 `sent2` 的第 j 个句子之间的余弦相似度。
 
 ```python
 similarity = model.similarity(sent1, sent2, return_matrix=True)
@@ -95,14 +95,14 @@ def build_index(
 - n_search：近似最近邻查找时的搜索类别数量，该参数越大，查找结果越准确。
 - batch_size：句向量计算时的批量大小
 
-使用 Chinese-STS-B 验证集（https://github.com/zejunwang1/CSTS）中去重后的所有句子构建索引，进行近似最近邻查找的示例代码如下：
+使用 Chinese-STS-B 验证集(https://github.com/zejunwang1/CSTS)中去重后的所有句子构建索引，进行近似最近邻查找的示例代码如下：
 
 ```python
 from bert4vec import Bert4Vec
 
 model = Bert4Vec(mode='roformer-sim-small')
 
-sentences_path = "./sentences.txt"
+sentences_path = "./sentences.txt"  # examples文件夹下
 model.build_index(sentences_path, ann_search=True, gpu_index=False, n_search=32)
 
 results = model.search(queries=['一个男人在弹吉他。', '一个女人在做饭'], threshold=0.6, top_k=5)

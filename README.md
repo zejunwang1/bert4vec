@@ -36,7 +36,7 @@ print(vecs)
 ```
 
 结果如下：
-
+![image](https://github.com/zejunwang1/bert4vec/blob/main/images/fig1.png)
 
 
 当需要计算英文句子的稠密向量时，需要设置 mode='paraphrase-multilingual-minilm'。

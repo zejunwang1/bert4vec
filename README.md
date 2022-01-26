@@ -105,7 +105,7 @@ def build_index(
 - ann_search：是否进行近似最近邻查找。若为 False，则查找时进行暴力搜索计算，返回精确结果。
 - gpu_index：是否构建 gpu 索引。
 - n_search：近似最近邻查找时的搜索类别数量，该参数越大，查找结果越准确。
-- batch_size：句向量计算时的批量大小
+- batch_size：句向量计算时的批量大小。
 
 使用 Chinese-STS-B 验证集 (https://github.com/zejunwang1/CSTS) 中去重后的所有句子构建索引，进行近似最近邻查找的示例代码如下：
 

@@ -36,6 +36,7 @@ print(vecs)
 ```
 
 结果如下：
+
 ![image](https://github.com/zejunwang1/bert4vec/blob/main/images/fig1.png)
 
 

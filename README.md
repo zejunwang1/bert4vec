@@ -13,7 +13,7 @@
 #### 方式一
 
 ```shell
-pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ bert4vec
+pip install bert4vec
 ```
 
 #### 方式二

@@ -167,6 +167,7 @@ mode 与 model_name_or_path 的对应关系如下：
 
 ### 链接
 
+- https://huggingface.co/WangZeJun
 - https://github.com/ZhuiyiTechnology/simbert
 - https://github.com/ZhuiyiTechnology/roformer-sim
 - https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2

@@ -162,6 +162,7 @@ mode 与 model_name_or_path 的对应关系如下：
 ### Contact
 
 邮箱： wangzejunscut@126.com
+
 微信：autonlp
 
 ### 链接

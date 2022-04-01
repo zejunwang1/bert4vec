@@ -22,7 +22,7 @@ pip install bert4vec
 git clone https://github.com/zejunwang1/bert4vec
 cd bert4vec/
 python setup.py sdist
-pip install dist/bert4vec-1.0.0.tar.gz
+pip install dist/bert4vec-0.1.0.tar.gz
 ```
 
 ### 功能介绍

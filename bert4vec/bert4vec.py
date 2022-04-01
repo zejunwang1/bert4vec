@@ -111,7 +111,9 @@ class Bert4Vec(object):
                                                        cache_dir=cache_folder,
                                                        library_name='bert4vec',
                                                        library_version=__version__)
-                    os.rename(model_path_tmp, model_path
+                    os.rename(model_path_tmp, model_path)
+            else:
+                model_path = model_name_or_path
 
             self.tokenizer = RoFormerTokenizer.from_pretrained(model_path)
             self.model = RoFormerModelWithPooler(model_path)

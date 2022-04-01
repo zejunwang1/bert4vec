@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='bert4vec',
-    version='1.0.0',
+    version='0.1.0',
     description='Chinese Sentence Embeddings using SimBERT / RoFormer-Sim / Paraphrase-Multilingual-MiniLM',
     long_description='bert4vec: https://github.com/zejunwang1/bert4vec',
     license='Apache License 2.0',

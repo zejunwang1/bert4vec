@@ -159,6 +159,11 @@ mode 与 model_name_or_path 的对应关系如下：
 
 当 mode 设置完成后，无需设置 model_name_or_path，代码会从 https://huggingface.co/ 上自动下载相应的预训练模型权重并加载。
 
+### Contact
+
+邮箱： wangzejunscut@126.com
+微信：autonlp
+
 ### 链接
 
 - https://github.com/ZhuiyiTechnology/simbert

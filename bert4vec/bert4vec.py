@@ -84,17 +84,21 @@ class Bert4Vec(object):
                                      mode="paraphrase-multilingual-minilm", model_name_or_path="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         """
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        assert mode in ["simbert-base", "roformer-sim-base", "roformer-sim-small", "paraphrase-multilingual-minilm"]
+        assert mode in ["simbert-base", "roformer-sim-base", "roformer-sim-small", "roformer-sim-ft-small", "roformer-sim-ft-base", "paraphrase-multilingual-minilm"]
         self.mode = mode
         if mode == "simbert-base":
             if not os.path.isdir(model_name_or_path):
                 model_name_or_path = "WangZeJun/simbert-base-chinese"
             self.tokenizer = BertTokenizer.from_pretrained(model_name_or_path)
             self.model = BertModel.from_pretrained(model_name_or_path)
-        elif mode in ["roformer-sim-base", "roformer-sim-small"]:
+        elif "roformer" in mode:
             if not os.path.isdir(model_name_or_path):
                 if mode == "roformer-sim-base":
                     model_name_or_path = "WangZeJun/roformer-sim-base-chinese"
+                if mode == "roformer-sim-ft-small":
+                    model_name_or_path = "blmoistawinde/roformer-sim-ft-small-chinese"
+                if mode == "roformer-sim-ft-base":
+                    model_name_or_path = "blmoistawinde/roformer-sim-ft-base-chinese"
                 else:
                     model_name_or_path = "WangZeJun/roformer-sim-small-chinese"
                 

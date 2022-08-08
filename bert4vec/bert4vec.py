@@ -26,11 +26,15 @@ class RoFormerModelWithPooler(nn.Module):
         model_file = os.path.join(model_path, "pytorch_model.bin")
         assert os.path.isfile(model_file)
         params_dict = torch.load(model_file)
-        pooler_weight = params_dict["pooler.dense.weight"]
-        pooler_bias = params_dict["pooler.dense.bias"]
+        try:
+            pooler_weight = params_dict["pooler.dense.weight"]
+            pooler_bias = params_dict["pooler.dense.bias"]
+        except:
+            # model with new conversion script convert_roformer_sim_original_tf_checkpoint_to_pytorch.py
+            pooler_weight = params_dict["roformer.pooler.weight"]
+            pooler_bias = params_dict["roformer.pooler.bias"]
         del params_dict
         self.pooler = nn.Linear(pooler_weight.shape[0], pooler_weight.shape[0])
-        self.activation = nn.Tanh()
         self.pooler.weight.data = pooler_weight
         self.pooler.bias.data = pooler_bias
     
@@ -64,7 +68,6 @@ class RoFormerModelWithPooler(nn.Module):
         sequence_output = outputs[0]
         cls_output = sequence_output[:, 0, :]
         pooled_output = self.pooler(cls_output)
-        pooled_output = self.activation(pooled_output)
         return (sequence_output, pooled_output) + outputs[1:]
 
 class Bert4Vec(object):
@@ -95,13 +98,12 @@ class Bert4Vec(object):
             if not os.path.isdir(model_name_or_path):
                 if mode == "roformer-sim-base":
                     model_name_or_path = "WangZeJun/roformer-sim-base-chinese"
-                if mode == "roformer-sim-ft-small":
+                elif mode == "roformer-sim-ft-small":
                     model_name_or_path = "blmoistawinde/roformer-sim-ft-small-chinese"
-                if mode == "roformer-sim-ft-base":
+                elif mode == "roformer-sim-ft-base":
                     model_name_or_path = "blmoistawinde/roformer-sim-ft-base-chinese"
                 else:
                     model_name_or_path = "WangZeJun/roformer-sim-small-chinese"
-                
                 try:
                     from torch.hub import _get_torch_home
                     torch_cache_home = _get_torch_home()
@@ -164,7 +166,7 @@ class Bert4Vec(object):
                     return_tensors="pt"
                 ).to(self.device)
                 outputs = self.model(**inputs)
-                if self.mode in ["simbert-base", "roformer-sim-base", "roformer-sim-small"]:
+                if self.mode in ["simbert-base", "roformer-sim-base", "roformer-sim-small", "roformer-sim-ft-base", "roformer-sim-ft-small"]:
                     embeddings = outputs[1]
                 else:
                     embeddings = self.mean_pooling(outputs[0], inputs["attention_mask"])

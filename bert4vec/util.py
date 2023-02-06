@@ -1,9 +1,8 @@
 import os
 from pathlib import Path
 from typing import Dict, Union
+from huggingface_hub import HfApi, hf_hub_download
 from huggingface_hub.constants import HUGGINGFACE_HUB_CACHE
-from huggingface_hub import HfApi, hf_hub_url, cached_download
-from huggingface_hub.snapshot_download import REPO_ID_SEPARATOR
 
 def snapshot_download(
     repo_id: str,
@@ -24,33 +23,22 @@ def snapshot_download(
     _api = HfApi()
     model_info = _api.model_info(repo_id=repo_id, revision=revision)
 
-    storage_folder = os.path.join(
-        cache_dir, repo_id.replace("/", REPO_ID_SEPARATOR) + "." + model_info.sha
-    )
-
+    storage_folder = os.path.join(cache_dir, repo_id.replace("/", "_"))
     for model_file in model_info.siblings:
-
-        url = hf_hub_url(
-            repo_id, filename=model_file.rfilename, revision=model_info.sha
-        )
-        relative_filepath = os.path.join(*model_file.rfilename.split("/"))
-
-        # Create potential nested dir
-        nested_dirname = os.path.dirname(
-            os.path.join(storage_folder, relative_filepath)
-        )
-        os.makedirs(nested_dirname, exist_ok=True)
-
-        path = cached_download(
-            url,
+        filename = os.path.join(*model_file.rfilename.split("/"))
+        if filename.endswith(".h5") or filename.endswith(".ot") or filename.endswith(".msgpack"):
+            continue
+        path = hf_hub_download(
+            repo_id=repo_id,
+            filename=filename,
             cache_dir=storage_folder,
-            force_filename=relative_filepath,
+            force_filename=filename,
             library_name=library_name,
             library_version=library_version,
             user_agent=user_agent,
         )
-
         if os.path.exists(path + ".lock"):
             os.remove(path + ".lock")
-
     return storage_folder
+
+snapshot_download("WangZeJun/roformer-sim-small-chinese")

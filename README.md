@@ -21,13 +21,12 @@ pip install bert4vec
 ```shell
 git clone https://github.com/zejunwang1/bert4vec
 cd bert4vec/
-python setup.py sdist
-pip install dist/bert4vec-0.1.0.tar.gz
+python setup.py install
 ```
 
 ### 功能介绍
 
-目前支持加载的句向量预训练模型包括 SimBERT、RoFormer-Sim 和 paraphrase-multilingual-MiniLM-L12-v2，其中 SimBERT 与 RoFormer-Sim 为苏剑林老师开源的中文句向量表示模型，paraphrase-multilingual-MiniLM-L12-v2 为 sentence-transformers 开放的多语言预训练模型，支持中文句向量生成。
+目前支持加载的句向量预训练模型包括 SimBERT、RoFormer-Sim（small 版本或 base 版本）和 paraphrase-multilingual-MiniLM-L12-v2，其中 SimBERT 与 RoFormer-Sim 为苏剑林老师开源的中文句向量表示模型，paraphrase-multilingual-MiniLM-L12-v2 为 sentence-transformers 开放的多语言预训练模型，支持中文句向量生成。
 
 #### 句向量生成
 
@@ -35,7 +34,7 @@ pip install dist/bert4vec-0.1.0.tar.gz
 from bert4vec import Bert4Vec
 
 # 支持四种模式：simbert-base/roformer-sim-base/roformer-sim-small/paraphrase-multilingual-minilm
-model = Bert4Vec(mode='simbert-base')	
+model = Bert4Vec(mode='simbert-base')    
 sentences = ['喜欢打篮球的男生喜欢什么样的女生', '西安下雪了？是不是很冷啊?', '第一次去见女朋友父母该如何表现？', '小蝌蚪找妈妈怎么样', 
              '给我推荐一款红色的车', '我喜欢北京']
 
@@ -50,15 +49,14 @@ print(vecs)
 
 ![image](https://github.com/zejunwang1/bert4vec/blob/main/images/fig1.png)
 
-
-当需要计算英文句子的稠密向量时，需要设置 mode='paraphrase-multilingual-minilm'。
+当 mode 参数缺失时，默认使用 roformer-sim-small 模型生成 384 维度的句向量。当需要计算英文句子的稠密向量时，需要设置 mode='paraphrase-multilingual-minilm'。
 
 #### 相似度计算
 
 ```python
 from bert4vec import Bert4Vec
 
-model = Bert4Vec(mode='paraphrase-multilingual-minilm')	
+model = Bert4Vec(mode='paraphrase-multilingual-minilm')    
 sent1 = ['喜欢打篮球的男生喜欢什么样的女生', '西安下雪了？是不是很冷啊?', '第一次去见女朋友父母该如何表现？', '小蝌蚪找妈妈怎么样', 
          '给我推荐一款红色的车', '我喜欢北京', 'That is a happy person']
 sent2 = ['爱打篮球的男生喜欢什么样的女生', '西安的天气怎么样啊？还在下雪吗？', '第一次去见家长该怎么做', '小蝌蚪找妈妈是谁画的', 
@@ -96,6 +94,7 @@ def build_index(
     sentences_or_file_path: Union[str, List[str]],
     ann_search: bool = False,
     gpu_index: bool = False,
+    gpu_memory: int = 16,
     n_search: int = 64,
     batch_size: int = 64
 )
@@ -104,6 +103,7 @@ def build_index(
 - sentences_or_file_path：要进行索引构建的句子文件路径或句子列表。
 - ann_search：是否进行近似最近邻查找。若为 False，则查找时进行暴力搜索计算，返回精确结果。
 - gpu_index：是否构建 gpu 索引。
+- gpu_memory：构建 gpu 索引时分配的显存，默认为 16G。
 - n_search：近似最近邻查找时的搜索类别数量，该参数越大，查找结果越准确。
 - batch_size：句向量计算时的批量大小。
 
@@ -171,6 +171,3 @@ mode 与 model_name_or_path 的对应关系如下：
 - https://github.com/ZhuiyiTechnology/simbert
 - https://github.com/ZhuiyiTechnology/roformer-sim
 - https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
-
-
-

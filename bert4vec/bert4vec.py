@@ -5,7 +5,14 @@ import os
 import math
 import logging
 import numpy as np
-from transformers import BertTokenizer, BertModel, RoFormerTokenizer, RoFormerModel, AutoTokenizer, AutoModel
+from transformers import (
+    BertTokenizerFast, 
+    BertModel, 
+    RoFormerTokenizerFast, 
+    RoFormerModel, 
+    AutoTokenizer, 
+    AutoModel
+)
 from typing import Union, List
 from numpy import ndarray
 import torch
@@ -69,8 +76,8 @@ class RoFormerModelWithPooler(nn.Module):
 
 class Bert4Vec(object):
     def __init__(self,
-                 mode: str = 'paraphrase-multilingual-minilm',
-                 model_name_or_path: str = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'):
+                 mode: str = 'roformer-sim-small',
+                 model_name_or_path: str = 'WangZeJun/roformer-sim-small-chinese'):
         """
         Args:
             mode: str, "simbert-base" 使用simbert-base-chinese模型获得句向量
@@ -89,7 +96,7 @@ class Bert4Vec(object):
         if mode == "simbert-base":
             if not os.path.isdir(model_name_or_path):
                 model_name_or_path = "WangZeJun/simbert-base-chinese"
-            self.tokenizer = BertTokenizer.from_pretrained(model_name_or_path)
+            self.tokenizer = BertTokenizerFast.from_pretrained(model_name_or_path)
             self.model = BertModel.from_pretrained(model_name_or_path)
         elif mode in ["roformer-sim-base", "roformer-sim-small"]:
             if not os.path.isdir(model_name_or_path):
@@ -107,20 +114,19 @@ class Bert4Vec(object):
                 cache_folder = os.path.join(torch_cache_home, 'bert4vec')
                 model_path = os.path.join(cache_folder, model_name_or_path.replace("/", "_"))
                 if not os.path.exists(model_path):
-                    model_path_tmp = snapshot_download(model_name_or_path,
-                                                       cache_dir=cache_folder,
-                                                       library_name='bert4vec',
-                                                       library_version=__version__)
-                    os.rename(model_path_tmp, model_path)
+                    model_path = snapshot_download(model_name_or_path,
+                                                   cache_dir=cache_folder,
+                                                   library_name='bert4vec',
+                                                   library_version=__version__)
             else:
                 model_path = model_name_or_path
 
-            self.tokenizer = RoFormerTokenizer.from_pretrained(model_path)
+            self.tokenizer = RoFormerTokenizerFast.from_pretrained(model_path)
             self.model = RoFormerModelWithPooler(model_path)
         else:
             if not os.path.isdir(model_name_or_path):
                 model_name_or_path = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-            self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+            self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
             self.model = AutoModel.from_pretrained(model_name_or_path)
         self.model.eval()
         self.model.to(self.device)
@@ -227,6 +233,7 @@ class Bert4Vec(object):
                     sentences_or_file_path: Union[str, List[str]],
                     ann_search: bool = False,
                     gpu_index: bool = False,
+                    gpu_memory: int = 16,
                     n_search: int = 64,
                     batch_size: int = 64):
         try:
@@ -263,7 +270,7 @@ class Bert4Vec(object):
                 if hasattr(faiss, "StandardGpuResources"):
                     logger.info("Use GPU-version faiss")
                     res = faiss.StandardGpuResources()
-                    res.setTempMemory(20 * 1024 * 1024 * 1024)
+                    res.setTempMemory(gpu_memory * 1024 * 1024 * 1024)
                     index = faiss.index_cpu_to_gpu(res, 0, index)
                 else:
                     logger.info("Use CPU-version faiss")

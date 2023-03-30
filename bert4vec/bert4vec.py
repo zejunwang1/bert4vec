@@ -8,7 +8,6 @@ import numpy as np
 from transformers import (
     BertTokenizerFast, 
     BertModel, 
-    RoFormerTokenizerFast, 
     RoFormerModel, 
     AutoTokenizer, 
     AutoModel
@@ -121,7 +120,7 @@ class Bert4Vec(object):
             else:
                 model_path = model_name_or_path
 
-            self.tokenizer = RoFormerTokenizerFast.from_pretrained(model_path)
+            self.tokenizer = BertTokenizerFast.from_pretrained(model_path)
             self.model = RoFormerModelWithPooler(model_path)
         else:
             if not os.path.isdir(model_name_or_path):
